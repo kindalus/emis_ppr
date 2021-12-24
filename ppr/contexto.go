@@ -1,5 +1,6 @@
-package fsec
+package ppr
 
 type Contexto struct {
 	GeradorReferencia GeradorReferencia
+	Repositorio       RepositorioFicheiros
 }

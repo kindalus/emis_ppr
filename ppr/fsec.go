@@ -1,4 +1,4 @@
-package fsec
+package ppr
 
 import (
 	"time"
@@ -6,37 +6,33 @@ import (
 	"github.com/kindalus/emis_pps/registos"
 )
 
-func GerarParaFacturas(config Config, contexto Contexto, facturas []Factura) ([]string, error) {
+func GerarFSECFacturas(cfg Config, ctx Contexto, facturas []Factura) ([]registos.Registo, error) {
 	var err error
+	reg := make([]registos.Registo, len(facturas)+2)
 
-	numeroFacturas := len(facturas)
-	numeroRegistos := numeroFacturas + 2
-	indexTrailer := numeroFacturas + 1
-
-	registos := make([]string, numeroRegistos)
-
-	registos[0], err = gerarRegistoHeader(config)
+	reg[0], err = gerarRegistoHeaderFSEC(cfg, ctx)
 
 	for i, factura := range facturas {
-		registos[i+1], err = gerarRegistoFactura(contexto, factura)
+		reg[i+1], err = gerarRegistoFactura(ctx, factura)
 	}
 
-	registos[indexTrailer], err = gerarRegistoTrailer(numeroFacturas)
+	reg[len(facturas)+1], err = gerarRegistoTrailerFSEC(len(facturas))
 
 	if err != nil {
 		return nil, err
 	}
 
-	return registos, nil
+	registos.Registos(reg).Sort()
+	return reg, nil
 }
 
-func gerarRegistoFactura(contexto Contexto, factura Factura) (string, error) {
+func gerarRegistoFactura(contexto Contexto, factura Factura) (registos.Registo, error) {
 	referencia := contexto.GeradorReferencia.GerarReferencia()
 	numeroLinhasTexto := (len(factura.texto) / 40) + 1
 
 	return registos.Gerar(registos.NewCampoTipoRegistoDetalheFactura(),
 		registos.NewCampoCodigoProcessamentoAdicionarAlterar(),
-		registos.NewCampo(15, 'N', referencia),
+		registos.NewCampoReferencia(referencia),
 		registos.NewCampoIndicadorProduto(0),
 		registos.NewCampoData(factura.dataLimitePagamento),
 		registos.NewCampoMontante(factura.valor),
@@ -48,24 +44,23 @@ func gerarRegistoFactura(contexto Contexto, factura Factura) (string, error) {
 	), nil
 }
 
-func gerarRegistoTrailer(numeroFacturas int) (string, error) {
+func gerarRegistoTrailerFSEC(numeroFacturas int) (registos.Registo, error) {
 	return registos.Gerar(registos.NewCampoTipoRegistoTrailer(),
 		registos.NewCampoNumeroRegistosDetalhe(numeroFacturas),
 		registos.NewFiller(527)), nil
 
 }
 
-func gerarRegistoHeader(config Config) (string, error) {
+func gerarRegistoHeaderFSEC(cfg Config, ctx Contexto) (registos.Registo, error) {
 	hoje := time.Now()
 	sequencia := 1
-	ultimoFicheiro := "00000000000"
 
 	return registos.Gerar(registos.NewCampoTipoRegistoHeader(),
 		registos.NewCampoNomeFicheiroFSEC(),
-		registos.NewCampoInstituicao(config.entidadeNegocio),
+		registos.NewCampoInstituicao(cfg.EntidadeNegocio()),
 		registos.NewCampoInstituicaoEGR(),
 		registos.NewCampoDataProcessamento(hoje, sequencia),
-		registos.NewCampoIdUltimoFicheiro(ultimoFicheiro),
-		registos.NewCampoNumeroEntidade(config.IdEntidade()),
+		registos.NewCampoIdUltimoFicheiro(ctx.Repositorio.UltimoFicheiro()),
+		registos.NewCampoNumeroEntidade(cfg.IdEntidade()),
 		registos.NewFiller(488)), nil
 }

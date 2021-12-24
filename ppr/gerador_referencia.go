@@ -1,4 +1,4 @@
-package fsec
+package ppr
 
 type GeradorReferencia interface {
 	GerarReferencia() string

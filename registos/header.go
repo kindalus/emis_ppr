@@ -15,6 +15,10 @@ func NewCampoNomeFicheiroFSEC() Campo {
 	return NewCampo(4, 'A', "FSEC")
 }
 
+func NewCampoNomeFicheiroFREF() Campo {
+	return NewCampo(4, 'A', "FREF")
+}
+
 func NewCampoInstituicao(entidade string) Campo {
 	return NewCampo(8, 'N', entidade)
 }

@@ -1,7 +1,6 @@
-package fsec
+package ppr
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -14,12 +13,12 @@ type Config struct {
 
 func NewConfig(id string, entidade string, tipo string) (Config, error) {
 
-	if errId := validarIdEntidade(id); errId != nil {
+	if errId := validarIDEntidade(id); errId != nil {
 		return Config{}, errId
 	}
 
-	if errId := validarTipoProduto(tipo); errId != nil {
-		return Config{}, errId
+	if errID := validarTipoProduto(tipo); errID != nil {
+		return Config{}, errID
 	}
 
 	if errId := validarEntidadeNegocio(entidade); errId != nil {
@@ -29,7 +28,7 @@ func NewConfig(id string, entidade string, tipo string) (Config, error) {
 	return Config{idEntidade: id, entidadeNegocio: entidade, tipoProduto: tipo}, nil
 }
 
-func validarIdEntidade(id string) error {
+func validarIDEntidade(id string) error {
 	return validar(id, 5, "Id da Entidade")
 }
 
@@ -43,11 +42,11 @@ func validarEntidadeNegocio(tipo string) error {
 
 func validar(id string, tamanho int, nomeCampo string) error {
 	if len(id) != tamanho {
-		return errors.New(fmt.Sprintf("O tamanho do <%v> eh diferente de %v", nomeCampo, tamanho))
+		return fmt.Errorf("O tamanho do <%v> eh diferente de %v", nomeCampo, tamanho)
 	}
 
 	if !ehNumerico(id) {
-		return errors.New(fmt.Sprintf("O valor do <%v> nao eh numerico", nomeCampo))
+		return fmt.Errorf("O valor do <%v> nao eh numerico", nomeCampo)
 	}
 
 	return nil
@@ -63,7 +62,7 @@ func (c Config) IdEntidade() string {
 	return c.idEntidade
 }
 
-func (c Config) EntidadeNegócio() string {
+func (c Config) EntidadeNegocio() string {
 	return c.entidadeNegocio
 }
 
