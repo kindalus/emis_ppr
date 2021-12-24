@@ -3,7 +3,7 @@ package ppr
 import (
 	"time"
 
-	"github.com/kindalus/emis_pps/registos"
+	"github.com/kindalus/emis_ppr/registos"
 )
 
 func GerarFSECFacturas(cfg Config, ctx Contexto, facturas []Factura) ([]registos.Registo, error) {

@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/kindalus/emis_pps/ppr"
+	"github.com/kindalus/emis_ppr/ppr"
 )
 
 func RunFSEC(sequencia int, ultimoFicheiro string) {

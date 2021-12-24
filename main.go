@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/kindalus/emis_pps/sandbox"
+	"github.com/kindalus/emis_ppr/sandbox"
 )
 
 func main() {

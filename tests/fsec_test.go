@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kindalus/emis_pps/mocks"
-	"github.com/kindalus/emis_pps/ppr"
+	"github.com/kindalus/emis_ppr/mocks"
+	"github.com/kindalus/emis_ppr/ppr"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
