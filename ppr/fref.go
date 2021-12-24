@@ -30,14 +30,13 @@ func GerarFREF(cfg Config, ctx Contexto, pagamentos []Pagamento) ([]registos.Reg
 
 func gerarRegistoHeaderFREF(config Config, ctx Contexto) (registos.Registo, error) {
 	hoje := time.Now()
-	sequencia := 1
 
 	return registos.Gerar(
 			registos.NewCampoTipoRegistoHeader(),
 			registos.NewCampoNomeFicheiroFREF(),
 			registos.NewCampoInstituicao(config.EntidadeNegocio()),
 			registos.NewCampoInstituicaoEGR(),
-			registos.NewCampoDataProcessamento(hoje, sequencia),
+			registos.NewCampoDataProcessamento(hoje, ctx.Repositorio.ProximoNumeroSequencia(hoje)),
 			registos.NewCampoIdUltimoFicheiro(ctx.Repositorio.UltimoFicheiro()),
 			registos.NewCampoNumeroEntidade(config.IdEntidade()),
 			registos.NewFiller(6)),

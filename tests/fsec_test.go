@@ -9,6 +9,7 @@ import (
 	"github.com/kindalus/emis_pps/ppr"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 // Deverá estar ordenado de forma crescente por número de referência
@@ -46,9 +47,10 @@ func Test_O_Primeiro_Ficheiro_Deve_Ter_O_Campo_Ultimo_Ficheiro_Preenchido_A_Zero
 
 // Em cada ficheiro que produz, a Entidade deve referir a identificação do ficheiro
 // anteriormente enviado, de modo a que possam ser controladas eventuais falhas de envio.
-func Test_Ficheiro_Deve_Referrir_Ficheiro_Anterior(t *testing.T) {
+func Test_Ficheiro_Deve_Referir_Ficheiro_Anterior(t *testing.T) {
 
 	mockRepo := new(mocks.RepositorioFicheiros)
+	mockRepo.On("ProximoNumeroSequencia", mock.Anything).Return(1)
 	mockRepo.On("UltimoFicheiro").Return("20211213001")
 
 	ctx := makeContexto()
@@ -56,7 +58,26 @@ func Test_Ficheiro_Deve_Referrir_Ficheiro_Anterior(t *testing.T) {
 
 	registos, _ := ppr.GerarFSECFacturas(makeConfig(), ctx, []ppr.Factura{})
 
-	assert.Equal(t, "20211213001", registos[0][32:32+11])
+	assert.Equal(t, "20211213001", registos[0].String()[32:32+11])
+
+}
+
+// Em cada ficheiro que produz, a Entidade deve referir a identificação do ficheiro
+// anteriormente enviado, de modo a que possam ser controladas eventuais falhas de envio.
+func Test_Id_Do_Ficheiro_Composto_Por_Data_E_Sequencia(t *testing.T) {
+
+	idFicheiro := time.Now().Format("20060102") + "004"
+
+	mockRepo := new(mocks.RepositorioFicheiros)
+	mockRepo.On("ProximoNumeroSequencia", mock.Anything).Return(4)
+	mockRepo.On("UltimoFicheiro").Return("00000000000")
+
+	ctx := makeContexto()
+	ctx.Repositorio = mockRepo
+
+	registos, _ := ppr.GerarFSECFacturas(makeConfig(), ctx, makeFacturas())
+
+	assert.Equal(t, idFicheiro, registos[0].String()[21:21+11])
 
 }
 

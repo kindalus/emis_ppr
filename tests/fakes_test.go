@@ -23,7 +23,7 @@ func makeContexto() ppr.Contexto {
 
 	return ppr.Contexto{
 		GeradorReferencia: geradorReferencia{},
-		Repositorio:       new(mocks.RepositorioFicheiros),
+		Repositorio:       repo,
 	}
 }
 

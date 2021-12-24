@@ -53,13 +53,12 @@ func gerarRegistoTrailerFSEC(numeroFacturas int) (registos.Registo, error) {
 
 func gerarRegistoHeaderFSEC(cfg Config, ctx Contexto) (registos.Registo, error) {
 	hoje := time.Now()
-	sequencia := 1
 
 	return registos.Gerar(registos.NewCampoTipoRegistoHeader(),
 		registos.NewCampoNomeFicheiroFSEC(),
 		registos.NewCampoInstituicao(cfg.EntidadeNegocio()),
 		registos.NewCampoInstituicaoEGR(),
-		registos.NewCampoDataProcessamento(hoje, sequencia),
+		registos.NewCampoDataProcessamento(hoje, ctx.Repositorio.ProximoNumeroSequencia(hoje)),
 		registos.NewCampoIdUltimoFicheiro(ctx.Repositorio.UltimoFicheiro()),
 		registos.NewCampoNumeroEntidade(cfg.IdEntidade()),
 		registos.NewFiller(488)), nil
