@@ -8,8 +8,8 @@ import (
 	"github.com/kindalus/emis_pps/ppr"
 )
 
-func RunFSEC() {
-	registos, err := ppr.GerarFSECFacturas(makeConfig(), makeContexto(), makeFacturas())
+func RunFSEC(sequencia int, ultimoFicheiro string) {
+	registos, err := ppr.GerarFSECFacturas(makeConfig(), makeContexto(sequencia, ultimoFicheiro), makeFacturas())
 
 	if err != nil {
 		panic(err)
@@ -20,8 +20,8 @@ func RunFSEC() {
 	}
 }
 
-func RunFREF() {
-	registos, err := ppr.GerarFREF(makeConfig(), makeContexto(), makePagamentos())
+func RunFREF(sequencia int, ultimoFicheiro string) {
+	registos, err := ppr.GerarFREF(makeConfig(), makeContexto(sequencia, ultimoFicheiro), makePagamentos())
 
 	if err != nil {
 		panic(err)
@@ -42,15 +42,32 @@ func (g geradorReferencia) GerarReferencia() string {
 	return fmt.Sprintf("%015d", referencia)
 }
 
+type repositorioFicheiros struct {
+	ultimoFicheiro string
+	sequencia      int
+}
+
+func (r repositorioFicheiros) UltimoFicheiro() string {
+	return r.ultimoFicheiro
+}
+
+func (r repositorioFicheiros) ProximoNumeroSequencia(data time.Time) int {
+	return r.sequencia
+}
+
 func makeConfig() ppr.Config {
 	config, _ := ppr.NewConfig("00976", "09000976", "99")
 
 	return config
 }
 
-func makeContexto() ppr.Contexto {
+func makeContexto(sequencia int, ultimoFicheiro string) ppr.Contexto {
 	return ppr.Contexto{
 		GeradorReferencia: geradorReferencia{},
+		Repositorio: repositorioFicheiros{
+			sequencia:      sequencia,
+			ultimoFicheiro: ultimoFicheiro,
+		},
 	}
 }
 
