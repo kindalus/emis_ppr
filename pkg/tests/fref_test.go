@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kindalus/emis_ppr/ppr"
+	"github.com/kindalus/emis_ppr/pkg/ppr"
 	"github.com/stretchr/testify/assert"
 )
 

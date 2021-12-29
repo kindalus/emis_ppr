@@ -3,7 +3,7 @@ package ppr_test
 import (
 	"testing"
 
-	"github.com/kindalus/emis_ppr/ppr"
+	"github.com/kindalus/emis_ppr/pkg/ppr"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

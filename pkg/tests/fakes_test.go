@@ -1,8 +1,8 @@
 package ppr_test
 
 import (
-	"github.com/kindalus/emis_ppr/mocks"
-	"github.com/kindalus/emis_ppr/ppr"
+	"github.com/kindalus/emis_ppr/pkg/mocks"
+	"github.com/kindalus/emis_ppr/pkg/ppr"
 	"github.com/stretchr/testify/mock"
 )
 

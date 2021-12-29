@@ -3,7 +3,7 @@ package ppr
 import (
 	"time"
 
-	"github.com/kindalus/emis_ppr/registos"
+	"github.com/kindalus/emis_ppr/pkg/registos"
 )
 
 func GerarFREF(cfg Config, ctx Contexto, pagamentos []Pagamento) ([]registos.Registo, error) {

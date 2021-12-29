@@ -1,11 +1,29 @@
-package sandbox
+package main
 
 import (
+	"flag"
 	"fmt"
 	"time"
 
-	"github.com/kindalus/emis_ppr/ppr"
+	"github.com/kindalus/emis_ppr/pkg/ppr"
 )
+
+func main() {
+
+	sandFREF := flag.Bool("fref", false, "Corre em sandbox (FREF)")
+	sss := flag.Int("s", 1, "Sequência do Ficheiro")
+	ultimoFicheiro := flag.String("u", "00000000000", "Id do último ficheiro")
+
+	flag.Parse()
+
+	if *sandFREF {
+		RunFREF(*sss, *ultimoFicheiro)
+		return
+	}
+
+	RunFSEC(*sss, *ultimoFicheiro)
+
+}
 
 func RunFSEC(sequencia int, ultimoFicheiro string) {
 	registos, err := ppr.GerarFSECFacturas(makeConfig(), makeContexto(sequencia, ultimoFicheiro), makeFacturas())
@@ -69,12 +87,6 @@ func makeFacturas() []ppr.Factura {
 		1,
 		100.000,
 		"Factura de teste")
-
-	// facturas[1], _ = ppr.NewFactura(
-	// 	agora.AddDate(0, 0, 15),
-	// 	1,
-	// 	200.00,
-	// 	"Entregas em 72 horas")
 
 	return facturas
 }
