@@ -51,6 +51,6 @@ func NewCampoMontante(montante float64) Campo {
 	return NewCampoDecimal(13, montante)
 }
 
-func NewCampoCodigoCliente(codigoCliente int64) Campo {
-	return NewCampoNumerico(10, codigoCliente)
+func NewCampoCodigoCliente(codigoCliente int32) Campo {
+	return NewCampoNumerico(10, int64(codigoCliente))
 }

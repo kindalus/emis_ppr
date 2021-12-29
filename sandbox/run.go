@@ -2,7 +2,6 @@ package sandbox
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/kindalus/emis_ppr/ppr"
@@ -32,16 +31,6 @@ func RunFREF(sequencia int, ultimoFicheiro string) {
 	}
 }
 
-type geradorReferencia struct{}
-
-func (g geradorReferencia) GerarReferencia() string {
-	random := rand.New(rand.NewSource(time.Now().UnixNano()))
-
-	referencia := random.Intn(999_999_999_999)
-
-	return fmt.Sprintf("%015d", referencia)
-}
-
 type repositorioFicheiros struct {
 	ultimoFicheiro string
 	sequencia      int
@@ -63,7 +52,7 @@ func makeConfig() ppr.Config {
 
 func makeContexto(sequencia int, ultimoFicheiro string) ppr.Contexto {
 	return ppr.Contexto{
-		GeradorReferencia: geradorReferencia{},
+		GeradorReferencia: ppr.NewGeradorReferencia(),
 		Repositorio: repositorioFicheiros{
 			sequencia:      sequencia,
 			ultimoFicheiro: ultimoFicheiro,
@@ -77,8 +66,8 @@ func makeFacturas() []ppr.Factura {
 
 	facturas[0], _ = ppr.NewFactura(
 		agora.AddDate(0, 1, 0),
-		5,
-		1000.000,
+		1,
+		100.000,
 		"Factura de teste")
 
 	// facturas[1], _ = ppr.NewFactura(

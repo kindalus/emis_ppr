@@ -1,8 +1,6 @@
 package ppr_test
 
 import (
-	"math/rand"
-
 	"github.com/kindalus/emis_ppr/mocks"
 	"github.com/kindalus/emis_ppr/ppr"
 	"github.com/stretchr/testify/mock"
@@ -22,24 +20,7 @@ func makeContexto() ppr.Contexto {
 	repo.On("ProximoNumeroSequencia", mock.Anything).Return(1)
 
 	return ppr.Contexto{
-		GeradorReferencia: geradorReferencia{},
+		GeradorReferencia: ppr.NewGeradorReferencia(),
 		Repositorio:       repo,
 	}
-}
-
-type geradorReferencia struct{}
-
-func (g geradorReferencia) GerarReferencia() string {
-	referencias := []string{
-		"000001234567890",
-		"000401234567891",
-		"000485836456867",
-		"000920629512510",
-		"000997970227015",
-		"000525870304065",
-		"000333885905807",
-		"000191897259696",
-	}
-
-	return referencias[rand.Intn(len(referencias))]
 }

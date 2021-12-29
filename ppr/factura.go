@@ -4,13 +4,13 @@ import "time"
 
 type Factura struct {
 	dataLimitePagamento time.Time
-	codigoCliente       int64
+	codigoCliente       int32
 	valor               float64
 	texto               string
 }
 
 func NewFactura(dataLimitePagamento time.Time,
-	codigoCliente int64,
+	codigoCliente int32,
 	valor float64,
 	texto string) (Factura, error) {
 
